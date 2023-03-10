@@ -10,7 +10,10 @@ Schema.Request = new SimpleSchema({
     type: Array,
     defaultValue: [],
   },
-  "tickets.$": String,
+  "tickets.$": {
+    type: String,
+    optional: true,
+  },
   approved: Boolean,
   approvedDate: {
     type: Date,
