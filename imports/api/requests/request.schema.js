@@ -3,9 +3,7 @@ import SimpleSchema from "simpl-schema";
 
 const Request = new Mongo.Collection("requests");
 
-const Schema = {};
-
-Schema.Request = new SimpleSchema({
+export const RequestSchema = new SimpleSchema({
   tickets: {
     type: Array,
     defaultValue: [],
@@ -18,14 +16,30 @@ Schema.Request = new SimpleSchema({
   approvedDate: {
     type: Date,
     optional: true,
+    defaultValue: null,
   },
   createdAt: {
     type: Date,
     defaultValue: new Date(),
+    optional: true,
   },
-  createdBy: String,
+  updatedAt: {
+    type: Date,
+    defaultValue: new Date(),
+    optional: true,
+  },
+  deleted: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true,
+  },
+  createdBy: {
+    type: String,
+    defaultValue: null,
+    optional: true,
+  },
 });
 
-Request.attachSchema(Schema.Request);
+Request.attachSchema(RequestSchema);
 
 export default Request;

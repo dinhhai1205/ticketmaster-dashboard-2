@@ -2,7 +2,7 @@ import SimpleSchema from "simpl-schema";
 import CheckRoles from "../../lib/roles";
 import { USER_ROLES } from "../../lib/enums";
 
-const schema = new SimpleSchema({
+export const UserSchema = new SimpleSchema({
   emails: {
     type: Array,
     optional: true,
@@ -34,12 +34,16 @@ const schema = new SimpleSchema({
     optional: true,
     blackbox: true,
   },
+  updatedAt: {
+    type: Date,
+    defaultValue: new Date(),
+  },
   createdAt: {
     type: Date,
   },
 });
 
-Meteor.users.attachSchema(schema);
+Meteor.users.attachSchema(UserSchema);
 
 Meteor.users.helpers({
   isAdmin() {
@@ -62,9 +66,5 @@ Meteor.users.helpers({
 //     return true;
 //   },
 // });
-
-const Users = {
-  schema,
-};
 
 export default Users;

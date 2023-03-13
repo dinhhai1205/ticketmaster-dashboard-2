@@ -3,10 +3,15 @@ import SimpleSchema from "simpl-schema";
 
 const Ticket = new Mongo.Collection("tickets");
 
-const Schema = {};
-
-Schema.Ticket = new SimpleSchema({
-  paymentId: String,
+export const TicketSchema = new SimpleSchema({
+  paymentId: {
+    type: String,
+    optional: true,
+  },
+  tabId: {
+    type: String,
+    optional: true,
+  },
   cost: Number,
   info: String,
   quantity: Number,
@@ -24,10 +29,25 @@ Schema.Ticket = new SimpleSchema({
   createdAt: {
     type: Date,
     defaultValue: new Date(),
+    optional: true,
   },
-  createdBy: String,
+  updatedAt: {
+    type: Date,
+    defaultValue: new Date(),
+    optional: true,
+  },
+  createdBy: {
+    type: String,
+    defaultValue: null,
+    optional: true,
+  },
+  deleted: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true,
+  },
 });
 
-Ticket.attachSchema(Schema.Ticket);
+Ticket.attachSchema(TicketSchema);
 
 export default Ticket;
