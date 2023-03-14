@@ -58,3 +58,32 @@ export const updateRequest = new ValidatedMethod({
     return _id;
   },
 });
+
+/**
+ * @name removeRequest
+ * @description Create a request
+ * @param id {String}
+ * @type {ValidatedMethod}
+ * @return {String}
+ */
+export const removeRequest = new ValidatedMethod({
+  name: "removeRequest",
+  validate: ({ id, force }) => {
+    check(id, String);
+    check(force, Match.Maybe(Boolean));
+  },
+  run({ id, force }) {
+    this.unblock();
+    console.log("Remove", id);
+
+    if (force) {
+      return Request.remove(id);
+    }
+
+    Request.update(id, {
+      $set: {
+        deleted: true,
+      },
+    });
+  },
+});
