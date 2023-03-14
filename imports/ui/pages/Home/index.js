@@ -31,7 +31,7 @@ const HomePage = () => {
     });
   }, []);
 
-  const removeTicket = useCallback(() => {
+  const removeTicket = useCallback((_id) => {
     call("removeTicket", { id: _id });
   }, []);
 
@@ -56,7 +56,7 @@ const HomePage = () => {
 
         return acc;
       }, {}),
-    []
+    [tickets]
   );
 
   if (requestLoading() || ticketLoading()) {
@@ -120,7 +120,7 @@ const HomePage = () => {
                       <div>Row: {row}</div>
                       <div>Section: {section}</div>
                       <div>Seats: {seat.join(", ")}</div>
-                      <div>Created by: {createdBy}</div>
+                      {/* <div>Created by: {createdBy}</div> */}
 
                       <div>
                         <Button
