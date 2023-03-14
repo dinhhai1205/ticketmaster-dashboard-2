@@ -12,7 +12,7 @@ export const TicketSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
-  cost: Number,
+  cost: String,
   info: String,
   quantity: Number,
   section: Number,

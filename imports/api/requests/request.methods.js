@@ -46,11 +46,13 @@ export const updateRequest = new ValidatedMethod({
     this.unblock();
 
     Request.update(_id, {
-      tickets,
-      approved,
-      approvedDate,
-      createdBy,
-      updatedDate: new Date(),
+      $set: {
+        tickets,
+        approved,
+        approvedDate,
+        createdBy,
+        updatedDate: new Date(),
+      },
     });
 
     return _id;
