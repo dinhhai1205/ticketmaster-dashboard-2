@@ -4,7 +4,6 @@ import 'antd/dist/reset.css';
 
 export const App = () => (
   <div>
-    <div>Home</div>
     <HomePage />
   </div>
 );

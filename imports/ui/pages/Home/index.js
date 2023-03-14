@@ -3,9 +3,8 @@ import { useFind, useSubscribe } from "meteor/react-meteor-data";
 import Request from "../../../api/requests/request.schema";
 import Ticket from "../../../api/tickets/ticket.schema";
 import { call } from "../../../lib/meteor";
-import { Collapse } from "antd";
+import { Button, Collapse, Card } from "antd";
 const { Panel } = Collapse;
-import 'antd/dist/reset.css';
 
 const HomePage = () => {
   const requestLoading = useSubscribe("requests");
@@ -109,7 +108,7 @@ const HomePage = () => {
                   return (
                     <Card
                       size="small"
-                      title={`Ticket Id: ${_id} - ${paymentId} - ${tabId}}`}
+                      title={`Ticket Id: ${_id} - PaymentId: ${paymentId} - Tab: ${tabId}`}
                       key={_id}
                     >
                       <div>Info: {info}</div>
@@ -124,15 +123,15 @@ const HomePage = () => {
                       <div>Created by: {createdBy}</div>
 
                       <div>
-                        <button
+                        <Button
                           disabled={approved}
                           onClick={() => approveTicket(_id)}
                         >
                           Approve
-                        </button>
-                        <button onClick={() => removeTicket(_id)}>
+                        </Button>
+                        <Button onClick={() => removeTicket(_id)}>
                           Delete
-                        </button>
+                        </Button>
                       </div>
                     </Card>
                   );
@@ -143,7 +142,7 @@ const HomePage = () => {
         })}
       </Collapse>
 
-      <button onClick={onClick}>Create Random Ticket</button>
+      <Button onClick={onClick}>Create Random Ticket</Button>
     </div>
   );
 };
