@@ -1,8 +1,11 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useFind, useSubscribe } from "meteor/react-meteor-data";
 import Request from "../../../api/requests/request.schema";
 import Ticket from "../../../api/tickets/ticket.schema";
 import { call } from "../../../lib/meteor";
+import { Collapse } from "antd";
+const { Panel } = Collapse;
+import 'antd/dist/reset.css';
 
 const HomePage = () => {
   const requestLoading = useSubscribe("requests");
@@ -43,6 +46,20 @@ const HomePage = () => {
     });
   }, []);
 
+  const ticketByUserId = useMemo(
+    () =>
+      tickets.reduce((acc, item) => {
+        if (!acc[item.createdBy]) {
+          acc[item.createdBy] = [];
+        }
+
+        acc[item.createdBy].push(item);
+
+        return acc;
+      }, {}),
+    []
+  );
+
   if (requestLoading() || ticketLoading()) {
     return <div>Loading...</div>;
   }
@@ -68,60 +85,64 @@ const HomePage = () => {
         })}
       </div> */}
 
-      <div style={{ background: "#ececec" }}>
-        <div>TICKETS</div>
-        {tickets.map(
-          ({
-            _id,
-            tabId,
-            paymentId,
-            cost,
-            info,
-            event,
-            quantity,
-            row,
-            section,
-            seat,
-            createdBy,
-            approved,
-          }) => {
-            return (
-              <div
-                style={{
-                  border: "1px solid green",
-                  borderRadius: 5,
-                  padding: 20,
-                }}
-                key={_id}
-              >
-                <div>Ticket Id: {_id}</div>
-                <div>Payment Id: {paymentId}</div>
-                <div>Tab Id: {tabId}</div>
-                <div>Info: {info}</div>
-                <div>Cost: ${cost}</div>
-                <div>Quantity: ${quantity}</div>
-                <div>Name: {event.name}</div>
-                <div>Venue: {event.venue}</div>
-                <div>Date: {new Date(event.datetime).toString()}</div>
-                <div>Row: {row}</div>
-                <div>Section: {section}</div>
-                <div>Seats: {seat.join(", ")}</div>
-                <div>Created by: {createdBy}</div>
+      <Collapse defaultActiveKey={["1"]}>
+        {Object.keys(ticketByUserId).map((key) => {
+          const ticketData = ticketByUserId[key];
 
-                <div>
-                  <button
-                    disabled={approved}
-                    onClick={() => approveTicket(_id)}
-                  >
-                    Approve
-                  </button>
-                  <button onClick={() => removeTicket(_id)}>Delete</button>
-                </div>
-              </div>
-            );
-          }
-        )}
-      </div>
+          return (
+            <Panel header={`UserId: ${key}`} key={key}>
+              {ticketData.map(
+                ({
+                  _id,
+                  tabId,
+                  paymentId,
+                  cost,
+                  info,
+                  event,
+                  quantity,
+                  row,
+                  section,
+                  seat,
+                  createdBy,
+                  approved,
+                }) => {
+                  return (
+                    <Card
+                      size="small"
+                      title={`Ticket Id: ${_id} - ${paymentId} - ${tabId}}`}
+                      key={_id}
+                    >
+                      <div>Info: {info}</div>
+                      <div>Cost: ${cost}</div>
+                      <div>Quantity: ${quantity}</div>
+                      <div>Name: {event.name}</div>
+                      <div>Venue: {event.venue}</div>
+                      <div>Date: {new Date(event.datetime).toString()}</div>
+                      <div>Row: {row}</div>
+                      <div>Section: {section}</div>
+                      <div>Seats: {seat.join(", ")}</div>
+                      <div>Created by: {createdBy}</div>
+
+                      <div>
+                        <button
+                          disabled={approved}
+                          onClick={() => approveTicket(_id)}
+                        >
+                          Approve
+                        </button>
+                        <button onClick={() => removeTicket(_id)}>
+                          Delete
+                        </button>
+                      </div>
+                    </Card>
+                  );
+                }
+              )}
+            </Panel>
+          );
+        })}
+      </Collapse>
+
       <button onClick={onClick}>Create Random Ticket</button>
     </div>
   );
