@@ -29,10 +29,14 @@ const HomePage = () => {
     });
   }, []);
 
-  const approveRequest = useCallback((_id) => {
+  const removeTicket = useCallback(() => {
+    call("removeTicket", { id: _id });
+  }, []);
+
+  const approveTicket = useCallback((_id) => {
     if (!_id) throw new Error("No ID");
 
-    call("updateRequest", {
+    call("updateTicket", {
       _id,
       approved: true,
       approvedDate: new Date(),
@@ -45,7 +49,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <div style={{ background: "#ececec" }}>
+      {/* <div style={{ background: "#ececec" }}>
         <div>REQUESTS</div>
         {requests.map((item) => {
           return (
@@ -62,7 +66,7 @@ const HomePage = () => {
             </div>
           );
         })}
-      </div>
+      </div> */}
 
       <div style={{ background: "#ececec" }}>
         <div>TICKETS</div>
@@ -79,6 +83,7 @@ const HomePage = () => {
             section,
             seat,
             createdBy,
+            approved,
           }) => {
             return (
               <div
@@ -103,15 +108,21 @@ const HomePage = () => {
                 <div>Seats: {seat.join(", ")}</div>
                 <div>Created by: {createdBy}</div>
 
-                <button onClick={() => call("removeTicket", { id: _id })}>
-                  Delete
-                </button>
+                <div>
+                  <button
+                    disabled={approved}
+                    onClick={() => approveTicket(_id)}
+                  >
+                    Approve
+                  </button>
+                  <button onClick={() => removeTicket(_id)}>Delete</button>
+                </div>
               </div>
             );
           }
         )}
       </div>
-      <button onClick={onClick}>Create</button>
+      <button onClick={onClick}>Create Random Ticket</button>
     </div>
   );
 };

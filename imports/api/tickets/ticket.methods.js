@@ -24,6 +24,7 @@ export const createTicket = new ValidatedMethod({
     seat,
     event,
     createdBy,
+    approved = false,
   }) {
     this.unblock();
 
@@ -41,10 +42,75 @@ export const createTicket = new ValidatedMethod({
         seat,
         event,
         createdBy,
+        approved,
       });
     }
 
     return null;
+  },
+});
+
+/**
+ * @name updateTicket
+ * @description Create a ticket
+ * @param id {String}
+ * @type {ValidatedMethod}
+ * @return {String}
+ */
+export const updateTicket = new ValidatedMethod({
+  name: "updateTicket",
+  validate: TicketSchema.pick(
+    "paymentId",
+    "tabId",
+    "cost",
+    "info",
+    "quantity",
+    "section",
+    "row",
+    "seat",
+    "event",
+    "createdBy",
+    "approved",
+    "approvedDate"
+  )
+    .extend({
+      _id: String,
+    })
+    .validator(),
+  run({
+    _id,
+    paymentId,
+    tabId,
+    cost,
+    info,
+    quantity,
+    section,
+    row,
+    seat,
+    event,
+    createdBy,
+    approved,
+    approvedDate,
+  }) {
+    this.unblock();
+
+    Ticket.update(_id, {
+      $set: {
+        paymentId,
+        tabId,
+        cost,
+        info,
+        quantity,
+        section,
+        row,
+        seat,
+        event,
+        createdBy,
+        updatedDate: new Date(),
+        approved,
+        approvedDate: approvedDate || new Date(),
+      },
+    });
   },
 });
 
